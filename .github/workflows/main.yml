@@ -53,16 +53,19 @@ jobs:
 
       - name: Activate virtual environment
         run: source snyk-venv/bin/activate
-
+        
+      - uses: snyk/actions/setup@master
       - name: Install dependencies
         run: pip3 install -r requirements.txt
   
-      - name: Run Snyk to check for vulnerabilities
-      - uses: snyk/actions/python@master
+      - name: Test dependencies with Snyk
+        run: snyk test
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --all-projects --severity-threshold=high
+          SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
+      - name: Monitor dependencies for security issues with Snyk
+        run: snyk monitor
+        env:
+          SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
      
      
           
